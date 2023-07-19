@@ -3,8 +3,9 @@ import { useState } from "react"
 
 function Home() {
 
+  
+
   const [userInput, setUserInput] = useState("");  
-  console.log(userInput);
 
   //way of initialize object in typscript
   type todoInfo = {
@@ -39,6 +40,34 @@ function Home() {
     }
   }
 
+  // delete item 
+  const deleteItem = (delId:any) => {
+    setTodoList((pre) => (
+      pre.filter((task) => (
+        task.id !== delId
+      ))
+    ));
+  }
+
+   //Todo Unit
+  type TodoProps = {
+    title: string;
+    onClick:any;
+  }; 
+  
+  const TodoUnit = ({title, onClick}:TodoProps) => (
+  
+    <div className="flex w-full pb-1 gap-3">
+        <div className="w-[90%] flex items-center pl-3 rounded-md bg-violet-500 hover:bg-violet-600"><h3 className="text-gray-200 font-semibold">{title}</h3></div>
+        <div className="flex items-center justify-around w-[10%] gap-2">
+          <div onClick={onClick} className="p-2 rounded-md bg-red-600 cursor-pointer hover:bg-red-700 hover:text-white transition ease-in"><span className="material-symbols-outlined">delete</span></div>
+          <div className="p-2 rounded-md bg-yellow-300 cursor-pointer hover:bg-yellow-400 hover:text-white transition ease-in"><span className="material-symbols-outlined">edit</span></div>
+        </div>
+    </div>
+   //Todo Unit
+
+  )
+
   return (
         
     <div className="flex flex-col justify-center items-center w-3/5 m-auto font-sans mt-10">
@@ -52,8 +81,20 @@ function Home() {
         </div>
     </section>
 
+    <section className="w-full pt-8 ">
+      
+      {
+        todoList?.map((todoList)=> {
+          return(<TodoUnit onClick={()=> deleteItem(todoList.id)} key={todoList.id} title={todoList.title}/>)
+        })
+      }
+     
+      
+    </section>
+
 </div>
   )
 }
 
 export default Home
+
