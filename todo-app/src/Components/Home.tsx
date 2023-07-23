@@ -11,6 +11,7 @@ function Home() {
   type todoInfo = {
     id: number;
     title: string;
+    isComplete: boolean;
   };
   const [todoList, setTodoList] = useState<todoInfo[]>([]);
   console.log(todoList);
@@ -23,7 +24,7 @@ function Home() {
         const listid = 1
         setTodoList([
           ...todoList, //Spred and add new todo
-          {id:listid, title:title} //add new todo
+          {id:listid, title:title , isComplete: false} //add new todo
         ])
 
         setUserInput("") //Clear input box
@@ -33,7 +34,7 @@ function Home() {
         
         setTodoList([
           ...todoList, //Spred and add new todo
-          {id:listLastId, title:title} //add new todo
+          {id:listLastId, title:title, isComplete: false} //add new todo
         ])
         setUserInput("") //Clear input box
       }
@@ -49,24 +50,28 @@ function Home() {
     ));
   }
 
-   //Todo Unit
-  type TodoProps = {
-    title: string;
-    onClick:any;
-  }; 
-  
-  const TodoUnit = ({title, onClick}:TodoProps) => (
-  
-    <div className="flex w-full pb-1 gap-3">
-        <div className="w-[90%] flex items-center pl-3 rounded-md bg-violet-500 hover:bg-violet-600"><h3 className="text-gray-200 font-semibold">{title}</h3></div>
-        <div className="flex items-center justify-around w-[10%] gap-2">
-          <div onClick={onClick} className="p-2 rounded-md bg-red-600 cursor-pointer hover:bg-red-700 hover:text-white transition ease-in"><span className="material-symbols-outlined">delete</span></div>
-          <div className="p-2 rounded-md bg-yellow-300 cursor-pointer hover:bg-yellow-400 hover:text-white transition ease-in"><span className="material-symbols-outlined">edit</span></div>
-        </div>
-    </div>
-   //Todo Unit
+  // ******************************************
 
-  )
+    //Mark item as completed
+    const markAsCompleted = (editid:any) =>{
+      setTodoList(
+        todoList.map((item) => {
+         if(item.id == editid){
+           if(item.isComplete == false){
+   
+             return{...item, isComplete: true}
+           }else{
+     
+             return{...item, isComplete: false}
+           }
+         }
+   
+         return item;
+       })
+      )
+     }
+     //Mark item as completed
+   //******************************************/
 
   return (
         
@@ -85,10 +90,9 @@ function Home() {
       
       {
         todoList?.map((todoList)=> {
-          return(<TodoUnit onClick={()=> deleteItem(todoList.id)} key={todoList.id} title={todoList.title}/>)
+          return(<TodoUnit onClickEdit={[()=> markAsCompleted(todoList.id), {todoList, setTodoList}, todoList.id]} onClickDelete={()=> deleteItem(todoList.id)} key={todoList.id} title={todoList.title}/>)
         })
       }
-     
       
     </section>
 
@@ -98,3 +102,27 @@ function Home() {
 
 export default Home
 
+//Todo Unit
+type TodoProps = {
+  title: string;
+  onClickDelete:any;
+  onClickEdit:any;
+}; 
+
+const TodoUnit = ({title, onClickDelete, onClickEdit}:TodoProps) => {  
+
+  console.log(onClickEdit[1].todoList.isComplete);
+
+  return(
+    <div className="flex w-full pb-1 gap-3">
+    <div 
+    style={{background: onClickEdit[1].todoList.isComplete && "green"}}
+    className="w-[90%] flex items-center pl-3 rounded-md bg-violet-500 hover:bg-violet-600"><h3 className="text-gray-200 font-semibold">{title}</h3></div>
+    <div className="flex items-center justify-around w-[10%] gap-2">
+      <div onClick={onClickDelete} className="p-2 rounded-md bg-red-600 cursor-pointer hover:bg-red-700 hover:text-white transition ease-in"><span className="material-symbols-outlined">delete</span></div>
+      <div onClick={onClickEdit[0]} className="p-2 rounded-md bg-yellow-300 cursor-pointer hover:bg-yellow-400 hover:text-white transition ease-in"><span className="material-symbols-outlined">edit</span></div>
+    </div>
+</div>
+
+)}
+ //Todo Unit
