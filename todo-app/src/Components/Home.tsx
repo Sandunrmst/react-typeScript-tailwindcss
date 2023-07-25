@@ -117,10 +117,10 @@ const TodoUnit = ({title, onClickDelete, onClickEdit}:TodoProps) => {
     <div className="flex w-full pb-1 gap-3">
     <div 
     style={{background: onClickEdit[1].todoList.isComplete && "green"}}
-    className="w-[90%] flex items-center pl-3 rounded-md bg-violet-500 hover:bg-violet-600"><h3 className="text-gray-200 font-semibold">{title}</h3></div>
+    className="w-[90%] flex items-center pl-3 rounded-md bg-violet-500 hover:bg-violet-600"><h3 style={{textDecorationLine:onClickEdit[1].todoList.isComplete && "line-through"}} className="text-gray-200 font-semibold">{title}</h3></div>
     <div className="flex items-center justify-around w-[10%] gap-2">
       <div onClick={onClickDelete} className="p-2 rounded-md bg-red-600 cursor-pointer hover:bg-red-700 hover:text-white transition ease-in"><span className="material-symbols-outlined">delete</span></div>
-      <div onClick={onClickEdit[0]} className="p-2 rounded-md bg-yellow-300 cursor-pointer hover:bg-yellow-400 hover:text-white transition ease-in"><span className="material-symbols-outlined">edit</span></div>
+      <div onClick={onClickEdit[0]} className="p-2 rounded-md bg-yellow-300 cursor-pointer hover:bg-yellow-400 hover:text-white transition ease-in">{onClickEdit[1].todoList.isComplete ? <span className="material-symbols-outlined text-green-800">check_circle</span> : <span className="material-symbols-outlined">checklist_rtl</span> }</div>
     </div>
 </div>
 
